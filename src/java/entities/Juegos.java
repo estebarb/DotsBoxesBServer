@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -40,6 +41,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Juegos.findByFecha", query = "SELECT j FROM Juegos j WHERE j.fecha = :fecha"),
     @NamedQuery(name = "Juegos.findByTorneo", query = "SELECT j FROM Juegos j WHERE j.torneo = :torneo")})
 public class Juegos implements Serializable {
+    @Column(name = "filas")
+    private Integer filas;
+    @Column(name = "columnas")
+    private Integer columnas;
+    @Lob
+    @Column(name = "tablero")
+    private byte[] tablero;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -170,6 +178,30 @@ public class Juegos implements Serializable {
     @Override
     public String toString() {
         return "entities.Juegos[ id=" + id + " ]";
+    }
+
+    public Integer getFilas() {
+        return filas;
+    }
+
+    public void setFilas(Integer filas) {
+        this.filas = filas;
+    }
+
+    public Integer getColumnas() {
+        return columnas;
+    }
+
+    public void setColumnas(Integer columnas) {
+        this.columnas = columnas;
+    }
+
+    public byte[] getTablero() {
+        return tablero;
+    }
+
+    public void setTablero(byte[] tablero) {
+        this.tablero = tablero;
     }
     
 }
