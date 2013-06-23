@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  *
  * @author Esteban
  */
-@javax.ejb.Stateless
+//@javax.ejb.Stateless
 @Path("entities.usuarios")
 public class UsuariosFacadeREST extends AbstractFacade<Usuarios> {
     @PersistenceContext(unitName = "DotsBoxesBServerPU")

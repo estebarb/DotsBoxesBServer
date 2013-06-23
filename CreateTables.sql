@@ -5,7 +5,9 @@ CREATE TABLE "Usuarios"
   id bigserial NOT NULL PRIMARY KEY,
   email character varying(255),
   nombre character varying(255),
-  passwordhash character varying(255),
+  password character varying(32),
+  salt character varying(32),
+  lastlogin timestamp,
   ranking integer
 );
 CREATE INDEX "mail_idx" on "Usuarios" (lower(email));
