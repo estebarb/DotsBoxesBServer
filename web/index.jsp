@@ -4,7 +4,6 @@
     Author     : Esteban
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es" ng-app="myApp">
@@ -23,9 +22,10 @@
 
         <!-- Si no ha iniciado sesión -->
         <div class="container">
-            <div ng-switch="userID">
-                <div ng-switch-when="null">
-                    <div ng-include="'/app/partials/notlogged.html'">
+            <div>
+                <div>
+                    <a href="/#/view1/">Vista 1</a>
+                    <a href="/#/view2/">Vista 2</a>
                 </div>
             </div>
             

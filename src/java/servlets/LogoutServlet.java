@@ -4,25 +4,20 @@
  */
 package servlets;
 
-import cus.Autenticar.Autenticar;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Esteban
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -36,37 +31,8 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Aquí debemos registrar el usuario, SIEMPRE Y CUANDO
-        // NO haya otro usuario registrado con el mismo correo
-        // electrónico.
-        HttpSession session = request.getSession(true);
-        Autenticar autenticador = new Autenticar();
-
-        // Lee los argumentos
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        // Verifica que la contraseña repetida esté igual
-        try {
-            // Se puede proceder a crear el usuario
-            Long idAsignado = autenticador.AutenticarUsuario(email, password);
-            if (idAsignado != null) {
-                // Inicializa la sesión
-                session.setAttribute("user", idAsignado.toString());
-                session.setAttribute("token", autenticador.GenerateSessionHash(idAsignado.toString(), session.getId()));
-                response.sendRedirect(request.getContextPath());
-            } else {
-                response.sendRedirect(request.getContextPath() + "/start.jsp?retry=badpass");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, "Problemas SQL al registrarse", ex);
-            response.sendRedirect(request.getContextPath() + "/bsod.jsp");
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, "Al parecer no tenemos SHA-1", ex);
-            response.sendRedirect(request.getContextPath() + "/bsod.jsp");
-        }
-
-
+        request.getSession(true).invalidate();
+        response.sendRedirect(request.getContextPath() + "/start.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

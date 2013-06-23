@@ -1,6 +1,5 @@
 package cus.Autenticar;
 
-import com.sun.xml.internal.ws.addressing.EPRSDDocumentFilter;
 import entities.Usuarios;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -84,7 +83,7 @@ public class Autenticar {
     }
 
     public Long getUserFromMail(String email) {
-        List<Usuarios> users = em.createNamedQuery("Usuarios.findAll")
+        List<Usuarios> users = em.createNamedQuery("Usuarios.findByEmail")
                 .setParameter("email", email)
                 .getResultList();
         if (users.isEmpty()) {
