@@ -61,7 +61,10 @@ CREATE TABLE "Juegos" (
     ganador bigint,
     turnoActual int,
     fecha timestamp,
-    torneo bigint --opcional
+    torneo bigint, --opcional
+filas integer,
+  columnas integer,
+  tablero bytea
 );
 ALTER TABLE "Juegos"
   OWNER TO proyecto;
@@ -84,7 +87,8 @@ CREATE TABLE "Pendientes"
 (
   id bigserial NOT NULL PRIMARY KEY,
   jugador bigint,
-  juego bigint
+  juego bigint,
+  turno boolean, -- Ya le toca jugar...
 );
 --create index on "Pendientes" (Jugador);
 ALTER TABLE "Pendientes"

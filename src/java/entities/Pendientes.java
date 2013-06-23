@@ -29,6 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Pendientes.findAll", query = "SELECT p FROM Pendientes p"),
     @NamedQuery(name = "Pendientes.findById", query = "SELECT p FROM Pendientes p WHERE p.id = :id")})
 public class Pendientes implements Serializable {
+    @Column(name = "turno")
+    private Boolean turno;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,6 +98,14 @@ public class Pendientes implements Serializable {
     @Override
     public String toString() {
         return "entities.Pendientes[ id=" + id + " ]";
+    }
+
+    public Boolean getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Boolean turno) {
+        this.turno = turno;
     }
     
 }

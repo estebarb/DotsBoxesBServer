@@ -41,13 +41,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Juegos.findByFecha", query = "SELECT j FROM Juegos j WHERE j.fecha = :fecha"),
     @NamedQuery(name = "Juegos.findByTorneo", query = "SELECT j FROM Juegos j WHERE j.torneo = :torneo")})
 public class Juegos implements Serializable {
+    @Lob
+    @Column(name = "tablero")
+    private byte[] tablero;
     @Column(name = "filas")
     private Integer filas;
     @Column(name = "columnas")
     private Integer columnas;
-    @Lob
-    @Column(name = "tablero")
-    private byte[] tablero;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
