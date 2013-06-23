@@ -28,7 +28,7 @@ import utils.EmailValidator;
 public class Autenticar {
 
     @PersistenceContext(unitName = "DotsBoxesBServerPU")
-    private EntityManager em;
+    private static EntityManager em;
     private final static int ITERATION_NUMBER = 1000;
     /**
      * SecretoAplicacion
@@ -78,7 +78,7 @@ public class Autenticar {
     public boolean AutenticarUsuario(String email, String password) throws SQLException, NoSuchAlgorithmException {
         String digest, salt;
 
-        boolean userExist = false;
+        boolean userExist/* = false*/;
         if (email == null || password == null) {
             email = "";
             password = "";
@@ -132,10 +132,20 @@ public class Autenticar {
      * @throws NoSuchAlgorithmException If the algorithm SHA-1 or the
      * SecureRandom is not supported by the JVM
      */
-    public boolean createUser(String email, String name, String password)
+    public static boolean createUser(String email, String name, String password)
             throws SQLException, NoSuchAlgorithmException {
         try {
             if (email != null && password != null && EmailValidator.ValidateEMail(email)) {
+                // Primero hay que validar que el email no haya sido usado antes...
+                List<Usuarios> users = em.createNamedQuery("Usuarios.findByEmail")
+                        .setParameter("email", email)
+                        .getResultList();
+                
+                // El correo ya había sido usado. NO SE PUEDE
+                if (!users.isEmpty()) {
+                    return false;
+                }
+
                 // Uses a secure Random not a simple Random
                 SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
                 // Salt generation 64 bits long
@@ -174,7 +184,7 @@ public class Autenticar {
      * @return byte[] The digested password
      * @throws NoSuchAlgorithmException If the algorithm doesn't exist
      */
-    public byte[] getHash(int iterationNb, String password, byte[] salt) {
+    public static byte[] getHash(int iterationNb, String password, byte[] salt) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-1");

@@ -4,18 +4,31 @@
  */
 package servlets;
 
+import cus.Autenticar.Autenticar;
+import entities.Usuarios;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Esteban
  */
 public class RegisterServlet extends HttpServlet {
+
+    @PersistenceContext(unitName = "DotsBoxesBServerPU")
+    private EntityManager em;
 
     /**
      * Processes requests for both HTTP
@@ -27,24 +40,38 @@ public class RegisterServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RegisterServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
+        // Aquí debemos registrar el usuario, SIEMPRE Y CUANDO
+        // NO haya otro usuario registrado con el mismo correo
+        // electrónico.        
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpSession session = request.getSession(false);
+
+        // Lee los argumentos
+        String email = request.getParameter("email");
+        String name = request.getParameter("name");
+        String pass1 = request.getParameter("password1");
+        String pass2 = request.getParameter("password2");
+
+        // Verifica que la contraseña repetida esté igual
+        if (!pass1.equals(pass2)) {
+            res.sendRedirect(request.getContextPath() + "/start.jsp?retry=badpass");
+        } else {
+            try {
+                // Se puede proceder a crear el usuario
+                boolean valido = Autenticar.createUser(email, name, pass2);
+            } catch (SQLException ex) {
+                Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, "Problemas SQL al registrarse", ex);
+                res.sendRedirect(request.getContextPath() + "/bsod.jsp");
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, "Al parecer no tenemos SHA-1", ex);
+                res.sendRedirect(request.getContextPath() + "/bsod.jsp");
+            }
         }
+
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
