@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Esteban
  */
 @Entity
-@Table(name = "Juegos")
+@Table(name = "juegos")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Juegos.findAll", query = "SELECT j FROM Juegos j"),
@@ -39,15 +39,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Juegos.findByIsterminado", query = "SELECT j FROM Juegos j WHERE j.isterminado = :isterminado"),
     @NamedQuery(name = "Juegos.findByTurnoactual", query = "SELECT j FROM Juegos j WHERE j.turnoactual = :turnoactual"),
     @NamedQuery(name = "Juegos.findByFecha", query = "SELECT j FROM Juegos j WHERE j.fecha = :fecha"),
-    @NamedQuery(name = "Juegos.findByTorneo", query = "SELECT j FROM Juegos j WHERE j.torneo = :torneo")})
+    @NamedQuery(name = "Juegos.findByTorneo", query = "SELECT j FROM Juegos j WHERE j.torneo = :torneo"),
+    @NamedQuery(name = "Juegos.findByFilas", query = "SELECT j FROM Juegos j WHERE j.filas = :filas"),
+    @NamedQuery(name = "Juegos.findByColumnas", query = "SELECT j FROM Juegos j WHERE j.columnas = :columnas")})
 public class Juegos implements Serializable {
-    @Lob
-    @Column(name = "tablero")
-    private byte[] tablero;
-    @Column(name = "filas")
-    private Integer filas;
-    @Column(name = "columnas")
-    private Integer columnas;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,15 +58,22 @@ public class Juegos implements Serializable {
     private Date fecha;
     @Column(name = "torneo")
     private BigInteger torneo;
-    @OneToMany(mappedBy = "juego")
-    private Collection<Ganadores> ganadoresCollection;
+    @Column(name = "filas")
+    private Integer filas;
+    @Column(name = "columnas")
+    private Integer columnas;
+    @Lob
+    @Column(name = "tablero")
+    private byte[] tablero;
     @OneToMany(mappedBy = "juego")
     private Collection<Pendientes> pendientesCollection;
+    @OneToMany(mappedBy = "juego")
+    private Collection<Ganadores> ganadoresCollection;
     @JoinColumn(name = "ganador", referencedColumnName = "id")
     @ManyToOne
     private Jugadores ganador;
     @OneToMany(mappedBy = "juego")
-    private Collection<JugadoresJuego> jugadoresJuegoCollection;
+    private Collection<Jugadoresjuego> jugadoresjuegoCollection;
 
     public Juegos() {
     }
@@ -120,13 +122,28 @@ public class Juegos implements Serializable {
         this.torneo = torneo;
     }
 
-    @XmlTransient
-    public Collection<Ganadores> getGanadoresCollection() {
-        return ganadoresCollection;
+    public Integer getFilas() {
+        return filas;
     }
 
-    public void setGanadoresCollection(Collection<Ganadores> ganadoresCollection) {
-        this.ganadoresCollection = ganadoresCollection;
+    public void setFilas(Integer filas) {
+        this.filas = filas;
+    }
+
+    public Integer getColumnas() {
+        return columnas;
+    }
+
+    public void setColumnas(Integer columnas) {
+        this.columnas = columnas;
+    }
+
+    public byte[] getTablero() {
+        return tablero;
+    }
+
+    public void setTablero(byte[] tablero) {
+        this.tablero = tablero;
     }
 
     @XmlTransient
@@ -138,6 +155,15 @@ public class Juegos implements Serializable {
         this.pendientesCollection = pendientesCollection;
     }
 
+    @XmlTransient
+    public Collection<Ganadores> getGanadoresCollection() {
+        return ganadoresCollection;
+    }
+
+    public void setGanadoresCollection(Collection<Ganadores> ganadoresCollection) {
+        this.ganadoresCollection = ganadoresCollection;
+    }
+
     public Jugadores getGanador() {
         return ganador;
     }
@@ -147,12 +173,12 @@ public class Juegos implements Serializable {
     }
 
     @XmlTransient
-    public Collection<JugadoresJuego> getJugadoresJuegoCollection() {
-        return jugadoresJuegoCollection;
+    public Collection<Jugadoresjuego> getJugadoresjuegoCollection() {
+        return jugadoresjuegoCollection;
     }
 
-    public void setJugadoresJuegoCollection(Collection<JugadoresJuego> jugadoresJuegoCollection) {
-        this.jugadoresJuegoCollection = jugadoresJuegoCollection;
+    public void setJugadoresjuegoCollection(Collection<Jugadoresjuego> jugadoresjuegoCollection) {
+        this.jugadoresjuegoCollection = jugadoresjuegoCollection;
     }
 
     @Override
@@ -178,30 +204,6 @@ public class Juegos implements Serializable {
     @Override
     public String toString() {
         return "entities.Juegos[ id=" + id + " ]";
-    }
-
-    public Integer getFilas() {
-        return filas;
-    }
-
-    public void setFilas(Integer filas) {
-        this.filas = filas;
-    }
-
-    public Integer getColumnas() {
-        return columnas;
-    }
-
-    public void setColumnas(Integer columnas) {
-        this.columnas = columnas;
-    }
-
-    public byte[] getTablero() {
-        return tablero;
-    }
-
-    public void setTablero(byte[] tablero) {
-        this.tablero = tablero;
     }
     
 }

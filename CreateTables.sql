@@ -1,8 +1,7 @@
-
---DROP TABLE "Usuarios" cascade constraints;
-CREATE TABLE "Usuarios"
+--drop table "usuarios" cascade constraints;
+create table "usuarios"
 (
-  id bigserial NOT NULL PRIMARY KEY,
+  id bigserial not null primary key,
   email character varying(255),
   nombre character varying(255),
   password character varying(32),
@@ -10,107 +9,107 @@ CREATE TABLE "Usuarios"
   lastlogin timestamp,
   ranking integer
 );
-CREATE INDEX "mail_idx" on "Usuarios" (lower(email));
-CREATE INDEX "nombre_idx" on "Usuarios" (lower(nombre));
-CREATE INDEX "ranking_idx" on "Usuarios" (ranking);
-ALTER TABLE "Usuarios"
-  OWNER TO proyecto;
+create index "mail_idx" on "usuarios" (lower(email));
+create index "nombre_idx" on "usuarios" (lower(nombre));
+create index "ranking_idx" on "usuarios" (ranking);
+alter table "usuarios"
+  owner to proyecto;
 --                       ---------------------------------
---DROP TABLE "Equipos" cascade constraints;
-create table "Equipos"
+--drop table "equipos" cascade constraints;
+create table "equipos"
 (
     id bigserial not null primary key,
-    Nombre character varying(255),
+    nombre character varying(255),
     ranking integer
 );
-create index on "Equipos" (lower(Nombre));
-create index on "Equipos" (ranking);
-ALTER TABLE "Equipos"
-  OWNER TO proyecto;
+create index on "equipos" (lower(nombre));
+create index on "equipos" (ranking);
+alter table "equipos"
+  owner to proyecto;
 
---DROP TABLE "MiembrosEquipo" cascade constraints;
-create table "MiembrosEquipo"
+--drop table "miembrosequipo" cascade constraints;
+create table "miembrosequipo"
 (
     id bigserial not null primary key,
     jugador bigint,
-    CONSTRAINT "jugador_con" FOREIGN KEY (jugador)
-      REFERENCES "Usuarios" (id) MATCH SIMPLE,
+    constraint "jugador_con" foreign key (jugador)
+      references "usuarios" (id) match simple,
     equipo bigint,
-    CONSTRAINT "equipo_con" FOREIGN KEY (equipo)
-      REFERENCES "Equipos" (id) MATCH SIMPLE
+    constraint "equipo_con" foreign key (equipo)
+      references "equipos" (id) match simple
 );
-ALTER TABLE "MiembrosEquipo"
-  OWNER TO proyecto;
+alter table "miembrosequipo"
+  owner to proyecto;
 
 
 --------------------------------------------
 
-CREATE TABLE "JugadoresPC"
+create table "jugadorespc"
 (
-  id bigserial NOT NULL PRIMARY KEY,
+  id bigserial not null primary key,
   nombre character varying(255),
   descripcion character varying(255),
   ranking integer
 );
-ALTER TABLE "JugadoresPC"
-  OWNER TO proyecto;
+alter table "jugadorespc"
+  owner to proyecto;
 
 --------------------------------------------
---DROP TABLE "Juegos" cascade constraints;
-CREATE TABLE "Juegos" (
-    id bigserial NOT NULL PRIMARY KEY,
-    isTerminado boolean,
+--drop table "juegos" cascade constraints;
+create table "juegos" (
+    id bigserial not null primary key,
+    isterminado boolean,
     ganador bigint,
-    turnoActual int,
+    turnoactual int,
     fecha timestamp,
     torneo bigint, --opcional
 filas integer,
   columnas integer,
   tablero bytea
 );
-ALTER TABLE "Juegos"
-  OWNER TO proyecto;
+alter table "juegos"
+  owner to proyecto;
 
---DROP TABLE "JugadoresJuego" cascade constraints;
-CREATE TABLE "JugadoresJuego"
+--drop table "jugadoresjuego" cascade constraints;
+create table "jugadoresjuego"
 (
-  id bigserial NOT NULL primary key,
+  id bigserial not null primary key,
   juego bigint,
   jugador bigint,
   puntaje integer
 );
-ALTER TABLE "JugadoresJuego"
-  OWNER TO proyecto;
+alter table "jugadoresjuego"
+  owner to proyecto;
 
 
 -------------------------------------------
---DROP TABLE "Pendientes" cascade constraints;
-CREATE TABLE "Pendientes"
+--drop table "pendientes" cascade constraints;
+create table "pendientes"
 (
-  id bigserial NOT NULL PRIMARY KEY,
+  id bigserial not null primary key,
   jugador bigint,
   juego bigint,
-  turno boolean, -- Ya le toca jugar...
+  turno boolean -- ya le toca jugar...
 );
---create index on "Pendientes" (Jugador);
-ALTER TABLE "Pendientes"
-  OWNER TO proyecto;
+--create index on "pendientes" (jugador);
+alter table "pendientes"
+  owner to proyecto;
 
 
 
 -------------------------
 
---DROP TABLE "Ganadores" cascade constraints;
-Create TABLE "Ganadores"
+--drop table "ganadores" cascade constraints;
+create table "ganadores"
 (
     id bigserial not null primary key,
     juego bigint    
 );
-ALTER TABLE "Ganadores"
-  OWNER TO proyecto;
+alter table "ganadores"
+  owner to proyecto;
 
 --------------------------------------------
-create table "Jugadores"
+create table "jugadores"
 (
     id bigserial not null primary key,
     type int,
@@ -119,78 +118,78 @@ create table "Jugadores"
     ganador bigint,
     jugadorpc bigint   
 );
-alter table "Jugadores"
+alter table "jugadores"
     owner to proyecto;
 
 
 
 -----------------------------------------------
-create table "ParticipantesTorneo"
+create table "participantestorneo"
 (
-    id bigserial NOT NULL PRIMARY KEY,
+    id bigserial not null primary key,
     jugador bigint,
     torneo bigint
 );
-ALTER TABLE "ParticipantesTorneo"
-  OWNER TO proyecto;
+alter table "participantestorneo"
+  owner to proyecto;
 
-CREATE TABLE "Torneos"
+create table "torneos"
 (
   id bigserial not null primary key,
   administrador bigint,
   tipotorneo int,
-  numParticipantes int,
-  nombretorneo character varying NOT NULL
+  numparticipantes int,
+  nombretorneo character varying not null
 );
-ALTER TABLE "Torneos"
-  OWNER TO proyecto;
+alter table "torneos"
+  owner to proyecto;
 
 
--- Agrega las constraints --
+-- agrega las constraints --
 
 
--- Jugadores --
-alter table "Jugadores" add CONSTRAINT "usuario_con" FOREIGN KEY (usuario)
-        references "Usuarios"(id) MATCH SIMPLE;
-alter table "Jugadores" add CONSTRAINT "equipo_con" FOREIGN KEY (equipo)
-        references "Equipos"(id) MATCH SIMPLE;
-alter table "Jugadores" add CONSTRAINT "ganador_con" FOREIGN KEY (ganador)
-        references "Ganadores"(id) MATCH SIMPLE;
-alter table "Jugadores" add CONSTRAINT "jugadorpc_con" FOREIGN KEY (jugadorpc)
-        references "JugadoresPC"(id) MATCH SIMPLE;
+-- jugadores --
+alter table "jugadores" add constraint "usuario_con" foreign key (usuario)
+        references "usuarios"(id) match simple;
+alter table "jugadores" add constraint "equipo_con" foreign key (equipo)
+        references "equipos"(id) match simple;
+alter table "jugadores" add constraint "ganador_con" foreign key (ganador)
+        references "ganadores"(id) match simple;
+alter table "jugadores" add constraint "jugadorpc_con" foreign key (jugadorpc)
+        references "jugadorespc"(id) match simple;
 
--- Participantes torneo --
-alter table "ParticipantesTorneo" add CONSTRAINT jugador_fk foreign key (jugador)
-        references "Jugadores"(id) MATCH SIMPLE;
-alter table "ParticipantesTorneo" add CONSTRAINT torneo_fk foreign key (torneo)
-        references "Torneos"(id) MATCH SIMPLE;
+-- participantes torneo --
+alter table "participantestorneo" add constraint jugador_fk foreign key (jugador)
+        references "jugadores"(id) match simple;
+alter table "participantestorneo" add constraint torneo_fk foreign key (torneo)
+        references "torneos"(id) match simple;
 
--- Torneo --
-alter table "Torneos" add CONSTRAINT torneo_admin_fkey FOREIGN KEY (administrador)
-      REFERENCES "Usuarios" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- torneo --
+alter table "torneos" add constraint torneo_admin_fkey foreign key (administrador)
+      references "usuarios" (id) match simple
+      on update no action on delete no action;
 
--- Ganadores --
-alter table "Ganadores" add CONSTRAINT "juego_con" FOREIGN KEY (juego)
-        references "Juegos"(id) MATCH SIMPLE;
+-- ganadores --
+alter table "ganadores" add constraint "juego_con" foreign key (juego)
+        references "juegos"(id) match simple;
 
--- Pendientes --
-alter table "Pendientes" add CONSTRAINT "jugador_fk" FOREIGN KEY (jugador)
-      REFERENCES "Usuarios" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-alter table "Pendientes" add CONSTRAINT "juego_fk" FOREIGN KEY (juego)
-      REFERENCES "Juegos" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- pendientes --
+alter table "pendientes" add constraint "jugador_fk" foreign key (jugador)
+      references "usuarios" (id) match simple
+      on update no action on delete no action;
+alter table "pendientes" add constraint "juego_fk" foreign key (juego)
+      references "juegos" (id) match simple
+      on update no action on delete no action;
 
--- Juegos --
-alter table "Juegos" add CONSTRAINT "ganador_fkey" FOREIGN KEY (ganador)
-      REFERENCES "Jugadores" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- juegos --
+alter table "juegos" add constraint "ganador_fkey" foreign key (ganador)
+      references "jugadores" (id) match simple
+      on update no action on delete no action;
 
--- JugadoresJuego --
-alter table "JugadoresJuego" add   CONSTRAINT "JugadoresJuego_juego_fkey" FOREIGN KEY (juego)
-      REFERENCES "Juegos" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-alter table "JugadoresJuego" add CONSTRAINT "JugadoresJuego_jugadores_fkey" FOREIGN KEY (jugador)
-      REFERENCES "Jugadores" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- jugadoresjuego --
+alter table "jugadoresjuego" add   constraint "jugadoresjuego_juego_fkey" foreign key (juego)
+      references "juegos" (id) match simple
+      on update no action on delete no action;
+alter table "jugadoresjuego" add constraint "jugadoresjuego_jugadores_fkey" foreign key (jugador)
+      references "jugadores" (id) match simple
+      on update no action on delete no action;

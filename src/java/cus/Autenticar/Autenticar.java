@@ -84,7 +84,7 @@ public class Autenticar {
     }
 
     public Long getUserFromMail(String email) {
-        List<Usuarios> users = em.createNamedQuery("Usuarios.findByEmail")
+        List<Usuarios> users = em.createNamedQuery("Usuarios.findAll")
                 .setParameter("email", email)
                 .getResultList();
         if (users.isEmpty()) {

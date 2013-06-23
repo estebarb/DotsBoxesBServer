@@ -23,32 +23,32 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Esteban
  */
 @Entity
-@Table(name = "pendientes")
+@Table(name = "jugadoresjuego")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Pendientes.findAll", query = "SELECT p FROM Pendientes p"),
-    @NamedQuery(name = "Pendientes.findById", query = "SELECT p FROM Pendientes p WHERE p.id = :id"),
-    @NamedQuery(name = "Pendientes.findByTurno", query = "SELECT p FROM Pendientes p WHERE p.turno = :turno")})
-public class Pendientes implements Serializable {
+    @NamedQuery(name = "Jugadoresjuego.findAll", query = "SELECT j FROM Jugadoresjuego j"),
+    @NamedQuery(name = "Jugadoresjuego.findById", query = "SELECT j FROM Jugadoresjuego j WHERE j.id = :id"),
+    @NamedQuery(name = "Jugadoresjuego.findByPuntaje", query = "SELECT j FROM Jugadoresjuego j WHERE j.puntaje = :puntaje")})
+public class Jugadoresjuego implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    @Column(name = "turno")
-    private Boolean turno;
+    @Column(name = "puntaje")
+    private Integer puntaje;
     @JoinColumn(name = "jugador", referencedColumnName = "id")
     @ManyToOne
-    private Usuarios jugador;
+    private Jugadores jugador;
     @JoinColumn(name = "juego", referencedColumnName = "id")
     @ManyToOne
     private Juegos juego;
 
-    public Pendientes() {
+    public Jugadoresjuego() {
     }
 
-    public Pendientes(Long id) {
+    public Jugadoresjuego(Long id) {
         this.id = id;
     }
 
@@ -60,19 +60,19 @@ public class Pendientes implements Serializable {
         this.id = id;
     }
 
-    public Boolean getTurno() {
-        return turno;
+    public Integer getPuntaje() {
+        return puntaje;
     }
 
-    public void setTurno(Boolean turno) {
-        this.turno = turno;
+    public void setPuntaje(Integer puntaje) {
+        this.puntaje = puntaje;
     }
 
-    public Usuarios getJugador() {
+    public Jugadores getJugador() {
         return jugador;
     }
 
-    public void setJugador(Usuarios jugador) {
+    public void setJugador(Jugadores jugador) {
         this.jugador = jugador;
     }
 
@@ -94,10 +94,10 @@ public class Pendientes implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pendientes)) {
+        if (!(object instanceof Jugadoresjuego)) {
             return false;
         }
-        Pendientes other = (Pendientes) object;
+        Jugadoresjuego other = (Jugadoresjuego) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -106,7 +106,7 @@ public class Pendientes implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Pendientes[ id=" + id + " ]";
+        return "entities.Jugadoresjuego[ id=" + id + " ]";
     }
     
 }

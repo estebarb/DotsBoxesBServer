@@ -13,6 +13,10 @@
     <class>entities.Pendientes</class>
     <class>entities.Torneos</class>
     <class>entities.Usuarios</class>
+    <class>entities.Jugadorespc</class>
+    <class>entities.Miembrosequipo</class>
+    <class>entities.Jugadoresjuego</class>
+    <class>entities.Participantestorneo</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://dotsboxes.tk:5432/erbtest"/>

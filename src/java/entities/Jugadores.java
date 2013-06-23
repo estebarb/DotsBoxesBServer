@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Esteban
  */
 @Entity
-@Table(name = "Jugadores")
+@Table(name = "jugadores")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Jugadores.findAll", query = "SELECT j FROM Jugadores j"),
@@ -41,24 +41,24 @@ public class Jugadores implements Serializable {
     private Long id;
     @Column(name = "type")
     private Integer type;
-    @OneToMany(mappedBy = "jugador")
-    private Collection<ParticipantesTorneo> participantesTorneoCollection;
     @OneToMany(mappedBy = "ganador")
     private Collection<Juegos> juegosCollection;
+    @OneToMany(mappedBy = "jugador")
+    private Collection<Jugadoresjuego> jugadoresjuegoCollection;
+    @OneToMany(mappedBy = "jugador")
+    private Collection<Participantestorneo> participantestorneoCollection;
     @JoinColumn(name = "usuario", referencedColumnName = "id")
     @ManyToOne
     private Usuarios usuario;
     @JoinColumn(name = "jugadorpc", referencedColumnName = "id")
     @ManyToOne
-    private JugadoresPC jugadorpc;
+    private Jugadorespc jugadorpc;
     @JoinColumn(name = "ganador", referencedColumnName = "id")
     @ManyToOne
     private Ganadores ganador;
     @JoinColumn(name = "equipo", referencedColumnName = "id")
     @ManyToOne
     private Equipos equipo;
-    @OneToMany(mappedBy = "jugador")
-    private Collection<JugadoresJuego> jugadoresJuegoCollection;
 
     public Jugadores() {
     }
@@ -84,21 +84,30 @@ public class Jugadores implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ParticipantesTorneo> getParticipantesTorneoCollection() {
-        return participantesTorneoCollection;
-    }
-
-    public void setParticipantesTorneoCollection(Collection<ParticipantesTorneo> participantesTorneoCollection) {
-        this.participantesTorneoCollection = participantesTorneoCollection;
-    }
-
-    @XmlTransient
     public Collection<Juegos> getJuegosCollection() {
         return juegosCollection;
     }
 
     public void setJuegosCollection(Collection<Juegos> juegosCollection) {
         this.juegosCollection = juegosCollection;
+    }
+
+    @XmlTransient
+    public Collection<Jugadoresjuego> getJugadoresjuegoCollection() {
+        return jugadoresjuegoCollection;
+    }
+
+    public void setJugadoresjuegoCollection(Collection<Jugadoresjuego> jugadoresjuegoCollection) {
+        this.jugadoresjuegoCollection = jugadoresjuegoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Participantestorneo> getParticipantestorneoCollection() {
+        return participantestorneoCollection;
+    }
+
+    public void setParticipantestorneoCollection(Collection<Participantestorneo> participantestorneoCollection) {
+        this.participantestorneoCollection = participantestorneoCollection;
     }
 
     public Usuarios getUsuario() {
@@ -109,11 +118,11 @@ public class Jugadores implements Serializable {
         this.usuario = usuario;
     }
 
-    public JugadoresPC getJugadorpc() {
+    public Jugadorespc getJugadorpc() {
         return jugadorpc;
     }
 
-    public void setJugadorpc(JugadoresPC jugadorpc) {
+    public void setJugadorpc(Jugadorespc jugadorpc) {
         this.jugadorpc = jugadorpc;
     }
 
@@ -131,15 +140,6 @@ public class Jugadores implements Serializable {
 
     public void setEquipo(Equipos equipo) {
         this.equipo = equipo;
-    }
-
-    @XmlTransient
-    public Collection<JugadoresJuego> getJugadoresJuegoCollection() {
-        return jugadoresJuegoCollection;
-    }
-
-    public void setJugadoresJuegoCollection(Collection<JugadoresJuego> jugadoresJuegoCollection) {
-        this.jugadoresJuegoCollection = jugadoresJuegoCollection;
     }
 
     @Override

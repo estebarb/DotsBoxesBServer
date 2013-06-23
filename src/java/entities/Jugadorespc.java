@@ -24,14 +24,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Esteban
  */
 @Entity
-@Table(name = "equipos")
+@Table(name = "jugadorespc")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Equipos.findAll", query = "SELECT e FROM Equipos e"),
-    @NamedQuery(name = "Equipos.findById", query = "SELECT e FROM Equipos e WHERE e.id = :id"),
-    @NamedQuery(name = "Equipos.findByNombre", query = "SELECT e FROM Equipos e WHERE e.nombre = :nombre"),
-    @NamedQuery(name = "Equipos.findByRanking", query = "SELECT e FROM Equipos e WHERE e.ranking = :ranking")})
-public class Equipos implements Serializable {
+    @NamedQuery(name = "Jugadorespc.findAll", query = "SELECT j FROM Jugadorespc j"),
+    @NamedQuery(name = "Jugadorespc.findById", query = "SELECT j FROM Jugadorespc j WHERE j.id = :id"),
+    @NamedQuery(name = "Jugadorespc.findByNombre", query = "SELECT j FROM Jugadorespc j WHERE j.nombre = :nombre"),
+    @NamedQuery(name = "Jugadorespc.findByDescripcion", query = "SELECT j FROM Jugadorespc j WHERE j.descripcion = :descripcion"),
+    @NamedQuery(name = "Jugadorespc.findByRanking", query = "SELECT j FROM Jugadorespc j WHERE j.ranking = :ranking")})
+public class Jugadorespc implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,17 +41,17 @@ public class Equipos implements Serializable {
     private Long id;
     @Column(name = "nombre")
     private String nombre;
+    @Column(name = "descripcion")
+    private String descripcion;
     @Column(name = "ranking")
     private Integer ranking;
-    @OneToMany(mappedBy = "equipo")
-    private Collection<Miembrosequipo> miembrosequipoCollection;
-    @OneToMany(mappedBy = "equipo")
+    @OneToMany(mappedBy = "jugadorpc")
     private Collection<Jugadores> jugadoresCollection;
 
-    public Equipos() {
+    public Jugadorespc() {
     }
 
-    public Equipos(Long id) {
+    public Jugadorespc(Long id) {
         this.id = id;
     }
 
@@ -70,21 +71,20 @@ public class Equipos implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     public Integer getRanking() {
         return ranking;
     }
 
     public void setRanking(Integer ranking) {
         this.ranking = ranking;
-    }
-
-    @XmlTransient
-    public Collection<Miembrosequipo> getMiembrosequipoCollection() {
-        return miembrosequipoCollection;
-    }
-
-    public void setMiembrosequipoCollection(Collection<Miembrosequipo> miembrosequipoCollection) {
-        this.miembrosequipoCollection = miembrosequipoCollection;
     }
 
     @XmlTransient
@@ -106,10 +106,10 @@ public class Equipos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Equipos)) {
+        if (!(object instanceof Jugadorespc)) {
             return false;
         }
-        Equipos other = (Equipos) object;
+        Jugadorespc other = (Jugadorespc) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -118,7 +118,7 @@ public class Equipos implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Equipos[ id=" + id + " ]";
+        return "entities.Jugadorespc[ id=" + id + " ]";
     }
     
 }

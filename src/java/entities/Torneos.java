@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Esteban
  */
 @Entity
-@Table(name = "Torneos")
+@Table(name = "torneos")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Torneos.findAll", query = "SELECT t FROM Torneos t"),
@@ -48,11 +48,11 @@ public class Torneos implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombretorneo")
     private String nombretorneo;
-    @OneToMany(mappedBy = "torneo")
-    private Collection<ParticipantesTorneo> participantesTorneoCollection;
     @JoinColumn(name = "administrador", referencedColumnName = "id")
     @ManyToOne
     private Usuarios administrador;
+    @OneToMany(mappedBy = "torneo")
+    private Collection<Participantestorneo> participantestorneoCollection;
 
     public Torneos() {
     }
@@ -98,21 +98,21 @@ public class Torneos implements Serializable {
         this.nombretorneo = nombretorneo;
     }
 
-    @XmlTransient
-    public Collection<ParticipantesTorneo> getParticipantesTorneoCollection() {
-        return participantesTorneoCollection;
-    }
-
-    public void setParticipantesTorneoCollection(Collection<ParticipantesTorneo> participantesTorneoCollection) {
-        this.participantesTorneoCollection = participantesTorneoCollection;
-    }
-
     public Usuarios getAdministrador() {
         return administrador;
     }
 
     public void setAdministrador(Usuarios administrador) {
         this.administrador = administrador;
+    }
+
+    @XmlTransient
+    public Collection<Participantestorneo> getParticipantestorneoCollection() {
+        return participantestorneoCollection;
+    }
+
+    public void setParticipantestorneoCollection(Collection<Participantestorneo> participantestorneoCollection) {
+        this.participantestorneoCollection = participantestorneoCollection;
     }
 
     @Override
