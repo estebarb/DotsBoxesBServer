@@ -17,13 +17,38 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/cosmo/bootstrap.min.css"/>
     </head>
     <body>
-        <!-- Si no ha iniciado sesión -->
         <div class="container">
             <div class="hero-unit">
                 <h1>Bienvenidos a Dots & Boxes</h1>
                 <p>Este es un divertido juego para dos o más jugadores, donde
                     gana quien completa más cuadrados.</p>
             </div>
+            <% // En este caso vamos a mostrar un error al usuario, 
+                // en caso de que antes estuviera logueado y ahora no.
+                // (o nos intentara engañar)
+                if (request.getParameter("retry") != null && request.getParameter("retry").equals("true")) {
+                    out.println("<div class='row'>");
+                    out.println("<div class='span12'>");
+                    out.println("<div class='alert alert-error'>");
+                    out.println("<button type='button' class='close' data-dismiss='alert'>&times;</button>");
+                    out.println("<h2>:-( Hubo problemas con su sesión</h2>");
+                    out.println("Vuelva a iniciar sesión en Dots & Boxes, o, si no tiene cuenta, cree una. ¡Se divertirá muchísimo!");
+                    out.println("</div>");
+                    out.println("</div>");
+                    out.println("</div>");
+                } else {
+                    out.println("<div class='row'>");
+                    out.println("<div class='span12'>");
+                    out.println("<div class='alert alert-info'>");
+                    out.println("<button type='button' class='close' data-dismiss='alert'>&times;</button>");
+                    out.println("<h2>¡Hola!</h2>");
+                    out.println("Inicie sesión o cree una cuenta nueva para comenzar a jugar");
+
+                    out.println("</div>");
+                    out.println("</div>");
+                    out.println("</div>");
+                }
+            %>
             <div class="row">
                 <div class="span6">
                     <h1>Iniciar sesión</h1>

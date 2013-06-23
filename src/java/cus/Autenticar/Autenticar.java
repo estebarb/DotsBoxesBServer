@@ -49,11 +49,11 @@ public class Autenticar {
      * @param verificationHash
      * @return
      */
-    public boolean ValidateUser(String userid, String sessionID, byte[] verificationHash) {
+    public static boolean ValidateUser(String userid, String sessionID, byte[] verificationHash) {
         return Arrays.equals(GenerateSessionHash(userid, sessionID), verificationHash);
     }
 
-    public byte[] GenerateSessionHash(String userid, String sessionID) {
+    public static byte[] GenerateSessionHash(String userid, String sessionID) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             digest.reset();

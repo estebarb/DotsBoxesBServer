@@ -1,5 +1,6 @@
 // Tomado de: http://stackoverflow.com/tags/servlet-filters/info
 
+import cus.Autenticar.Autenticar;
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -12,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.catalina.connector.Request;
 
 @WebFilter(urlPatterns = {"/api/*", "/", "/index.jsp"})
 public class LoginFilter implements Filter {
@@ -28,11 +30,24 @@ public class LoginFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("user") == null) {
+        if (session == null || session.getAttribute("user") == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/start.jsp"); // No logged-in user found, so redirect to login page.
         } else {
-            chain.doFilter(req, res); // Logged-in user found, so just continue request.
-        }
+            // Ahora debemos verificar que la sesión y el usuario sean correctos:
+            String user = (String) session.getAttribute("user");
+            String sessionID = (String) session.getId();
+            String token = (String) session.getAttribute("token");
+            boolean valido = Autenticar.ValidateUser(user, sessionID, token.getBytes());
+            if (valido) {
+                chain.doFilter(req, res); // Logged-in user found, so just continue request.
+            } else {
+                // ¡¡¡No es válido!!!
+                // Alguien nos está engañando (o reiniciamos el servlet)
+                // Es necesario destruir los datos que recibimos...
+                response.sendRedirect(request.getContextPath() + "/start.jsp?retry=true");
+            }// fin else de ¿sesión válida?
+            
+        }// fin else de ¿hay sesión?
     }
 
     @Override
@@ -40,5 +55,4 @@ public class LoginFilter implements Filter {
         // If you have assigned any expensive resources as field of
         // this Filter class, then you could clean/close them here.
     }
-
 }
