@@ -29,6 +29,8 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
+        
+        Autenticar autenticador = new Autenticar();
 
         if (session == null || session.getAttribute("user") == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/start.jsp"); // No logged-in user found, so redirect to login page.
@@ -37,7 +39,7 @@ public class LoginFilter implements Filter {
             String user = (String) session.getAttribute("user");
             String sessionID = (String) session.getId();
             String token = (String) session.getAttribute("token");
-            boolean valido = Autenticar.ValidateUser(user, sessionID, token.getBytes());
+            boolean valido = autenticador.ValidateUser(user, sessionID, token.getBytes());
             if (valido) {
                 chain.doFilter(req, res); // Logged-in user found, so just continue request.
             } else {

@@ -1,5 +1,6 @@
 package cus.Autenticar;
 
+import com.sun.xml.internal.ws.addressing.EPRSDDocumentFilter;
 import entities.Usuarios;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -13,7 +14,9 @@ import java.util.Arrays;
 import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Query;
 import utils.Base64Conversions;
+import utils.EMF;
 import utils.EmailValidator;
 
 /**
@@ -28,8 +31,13 @@ import utils.EmailValidator;
 public class Autenticar {
 
     @PersistenceContext(unitName = "DotsBoxesBServerPU")
-    private static EntityManager em;
+    private EntityManager em;
     private final static int ITERATION_NUMBER = 1000;
+    
+    public Autenticar(){
+        em = EMF.createEntityManager();
+    }
+    
     /**
      * SecretoAplicacion
      *
@@ -49,11 +57,11 @@ public class Autenticar {
      * @param verificationHash
      * @return
      */
-    public static boolean ValidateUser(String userid, String sessionID, byte[] verificationHash) {
+    public boolean ValidateUser(String userid, String sessionID, byte[] verificationHash) {
         return Arrays.equals(GenerateSessionHash(userid, sessionID), verificationHash);
     }
 
-    public static byte[] GenerateSessionHash(String userid, String sessionID) {
+    public byte[] GenerateSessionHash(String userid, String sessionID) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
             digest.reset();
@@ -74,20 +82,27 @@ public class Autenticar {
             return null;
         }
     }
-    
-    public static Long getUserFromMail(String email){
+
+    public Long getUserFromMail(String email) {
         List<Usuarios> users = em.createNamedQuery("Usuarios.findByEmail")
                 .setParameter("email", email)
                 .getResultList();
-        if(users.isEmpty())
-        {
+        if (users.isEmpty()) {
             return null;
-        }else{
+        } else {
             return users.get(0).getId();
         }
     }
 
-    public boolean AutenticarUsuario(String email, String password) throws SQLException, NoSuchAlgorithmException {
+    /**
+     *
+     * @param email
+     * @param password
+     * @return el ID del usuario o null si no existe/no valida
+     * @throws SQLException
+     * @throws NoSuchAlgorithmException
+     */
+    public Long AutenticarUsuario(String email, String password) throws SQLException, NoSuchAlgorithmException {
         String digest, salt;
 
         boolean userExist/* = false*/;
@@ -129,7 +144,12 @@ public class Autenticar {
         byte[] proposedDigest;
         proposedDigest = getHash(ITERATION_NUMBER, password, bSalt);
 
-        return Arrays.equals(proposedDigest, bDigest) && userExist;
+        if (Arrays.equals(proposedDigest, bDigest) && userExist) {
+            // Devuelve el ID del usuario...
+            return users.get(0).getId();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -144,15 +164,14 @@ public class Autenticar {
      * @throws NoSuchAlgorithmException If the algorithm SHA-1 or the
      * SecureRandom is not supported by the JVM
      */
-    public static boolean createUser(String email, String name, String password)
+    public boolean createUser(String email, String name, String password)
             throws SQLException, NoSuchAlgorithmException {
         try {
             if (email != null && password != null && EmailValidator.ValidateEMail(email)) {
                 // Primero hay que validar que el email no haya sido usado antes...
-                List<Usuarios> users = em.createNamedQuery("Usuarios.findByEmail")
-                        .setParameter("email", email)
-                        .getResultList();
-                
+                Query query = em.createNamedQuery("Usuarios.findByEmail");
+                List<Usuarios> users = query.setParameter("email", email).getResultList();
+
                 // El correo ya había sido usado. NO SE PUEDE
                 if (!users.isEmpty()) {
                     return false;
@@ -196,7 +215,7 @@ public class Autenticar {
      * @return byte[] The digested password
      * @throws NoSuchAlgorithmException If the algorithm doesn't exist
      */
-    public static byte[] getHash(int iterationNb, String password, byte[] salt) {
+    public byte[] getHash(int iterationNb, String password, byte[] salt) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-1");

@@ -5,16 +5,11 @@
 package servlets;
 
 import cus.Autenticar.Autenticar;
-import entities.Usuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +21,6 @@ import javax.servlet.http.HttpSession;
  * @author Esteban
  */
 public class RegisterServlet extends HttpServlet {
-
-    @PersistenceContext(unitName = "DotsBoxesBServerPU")
-    private EntityManager em;
 
     /**
      * Processes requests for both HTTP
@@ -47,7 +39,8 @@ public class RegisterServlet extends HttpServlet {
         // electrónico.        
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
+        Autenticar autenticador = new Autenticar();
 
         // Lee los argumentos
         String email = request.getParameter("email");
@@ -61,13 +54,13 @@ public class RegisterServlet extends HttpServlet {
         } else {
             try {
                 // Se puede proceder a crear el usuario
-                boolean valido = Autenticar.createUser(email, name, pass2);
-                Long idAsignado = Autenticar.getUserFromMail(email);
+                boolean valido = autenticador.createUser(email, name, pass2);
+                Long idAsignado = autenticador.getUserFromMail(email);
                 valido &= (idAsignado != null);
                 if (valido) {
                     // Inicializa la sesión
                     session.setAttribute("user", idAsignado.toString());
-                    session.setAttribute("token", Autenticar.GenerateSessionHash(idAsignado.toString(), session.getId()));
+                    session.setAttribute("token", autenticador.GenerateSessionHash(idAsignado.toString(), session.getId()));
                     res.sendRedirect(request.getContextPath());
                 } else {
                     res.sendRedirect(request.getContextPath() + "/start.jsp?retry=badpass");
