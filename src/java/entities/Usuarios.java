@@ -6,6 +6,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,6 +37,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuarios.findByPasswordhash", query = "SELECT u FROM Usuarios u WHERE u.passwordhash = :passwordhash"),
     @NamedQuery(name = "Usuarios.findByRanking", query = "SELECT u FROM Usuarios u WHERE u.ranking = :ranking")})
 public class Usuarios implements Serializable {
+    @Column(name = "password")
+    private String password;
+    @Column(name = "salt")
+    private String salt;
+    @Column(name = "lastlogin")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastlogin;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -163,6 +173,30 @@ public class Usuarios implements Serializable {
     @Override
     public String toString() {
         return "entities.Usuarios[ id=" + id + " ]";
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public Date getLastlogin() {
+        return lastlogin;
+    }
+
+    public void setLastlogin(Date lastlogin) {
+        this.lastlogin = lastlogin;
     }
     
 }
