@@ -62,6 +62,16 @@ public class RegisterServlet extends HttpServlet {
             try {
                 // Se puede proceder a crear el usuario
                 boolean valido = Autenticar.createUser(email, name, pass2);
+                Long idAsignado = Autenticar.getUserFromMail(email);
+                valido &= (idAsignado != null);
+                if (valido) {
+                    // Inicializa la sesión
+                    session.setAttribute("user", idAsignado.toString());
+                    session.setAttribute("token", Autenticar.GenerateSessionHash(idAsignado.toString(), session.getId()));
+                    res.sendRedirect(request.getContextPath());
+                } else {
+                    res.sendRedirect(request.getContextPath() + "/start.jsp?retry=badpass");
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, "Problemas SQL al registrarse", ex);
                 res.sendRedirect(request.getContextPath() + "/bsod.jsp");
