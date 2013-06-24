@@ -24,8 +24,8 @@
         <div class="container">
             <div>
                 <div>
-                    <a href="/#/view1/">Vista 1</a>
-                    <a href="/#/view2/">Vista 2</a>
+                    <a href="/#/home/" class="btn btn-large btn-primary">Inicio</a>
+                    <a href="/#/newgame/" class="btn btn-large btn-success">Crear Juego</a>
                 </div>
             </div>
             
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <input type="hidden" ng-model="userID" value="<%= request.getSession().getAttribute("userID")%>"/>
+        <input type="hidden" ng-model="userID" value="<%= request.getSession().getAttribute("user")%>"/>
 
         <div class="footer container">
             <p class="muted credit">
