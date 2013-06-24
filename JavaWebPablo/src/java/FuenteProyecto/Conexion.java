@@ -14,8 +14,7 @@ import javax.swing.JComboBox;
  * @author Fernando Valverde y Alexis DevitreBD\\
  */
 public class Conexion {
-    //private static final String nombreConexion = "jdbc:postgresql://dotsboxes.tk/dotsboxes?user=proyecto&password=20proyectoinge13";
-    private static final String nombreConexion = "jdbc:postgresql://dotsboxes.tk/dotsboxes?user=proyecto&password=20proyectoinge13";
+    private static final String nombreConexion = ""; // Poner acá al cargar
 
     private String hileraResultado;
     
