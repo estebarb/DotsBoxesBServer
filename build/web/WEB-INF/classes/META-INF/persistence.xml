@@ -2,17 +2,21 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="DotsBoxesBServerPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entities.Equipos</class>
     <class>entities.Ganadores</class>
+    <class>entities.Juegos</class>
+    <class>entities.Jugadores</class>
+    <class>entities.JugadoresJuego</class>
+    <class>entities.JugadoresPC</class>
+    <class>entities.MiembrosEquipo</class>
+    <class>entities.ParticipantesTorneo</class>
+    <class>entities.Pendientes</class>
     <class>entities.Torneos</class>
     <class>entities.Usuarios</class>
-    <class>entities.Juegos</class>
-    <class>entities.JugadoresPC</class>
-    <class>entities.Jugadores</class>
-    <class>entities.ParticipantesTorneo</class>
-    <class>entities.Equipos</class>
-    <class>entities.Pendientes</class>
-    <class>entities.JugadoresJuego</class>
-    <class>entities.MiembrosEquipo</class>
+    <class>entities.Jugadorespc</class>
+    <class>entities.Miembrosequipo</class>
+    <class>entities.Jugadoresjuego</class>
+    <class>entities.Participantestorneo</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://dotsboxes.tk:5432/erbtest"/>
