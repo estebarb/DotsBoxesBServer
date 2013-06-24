@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import service.service.UsuariosFacadeREST;
 
 @WebFilter(urlPatterns = {"/api/*", "/", "/index.jsp"})
 public class LoginFilter implements Filter {

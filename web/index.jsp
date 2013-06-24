@@ -1,56 +1,51 @@
-<%-- 
-    Document   : hello
-    Created on : 22/06/2013, 12:04:43 PM
-    Author     : Esteban
---%>
-
+<%@page import="java.util.List"%>
+<%@page import="entities.Pendientes"%>
+<%@page import="service.service.UsuariosFacadeREST"%>
+<%@page import="utils.EMF"%>
+<%@page import="javax.persistence.EntityManager"%>
+<%
+    Long id = Long.parseLong((String) request.getSession().getAttribute("user"));
+    UsuariosFacadeREST usrFacade = new UsuariosFacadeREST();
+    entities.Usuarios user = usrFacade.find(id);
+/*
+    EntityManager em = EMF.createEntityManager();
+    List<Pendientes> pendientes = em.createQuery("SELECT p FROM Pendientes p WHERE p.jugador = :jugador")
+            .setParameter("jugador", id)
+            .getResultList(); */
+%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="es" ng-app="myApp">
+<html lang="es">
     <head>
-        <meta charset="utf-8">
         <title>Dots & Boxes</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css"/>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/cosmo/bootstrap.min.css"/>
-        <link rel="stylesheet" href="app/css/app.css"/>
+        <%@include file="app/partials/header.jspf" %>
     </head>
     <body>
 
         <!-- Si no ha iniciado sesión -->
         <div class="container">
-            <div>
-                <div>
-                    <a href="/#/home/" class="btn btn-large btn-primary">Inicio</a>
-                    <a href="/#/newgame/" class="btn btn-large btn-success">Crear Juego</a>
-                </div>
-            </div>
-            
+            <%@include file="app/partials/menu.jspf" %>
+
             <div class="row">
                 <div class="span12">
-                    <div ng-view></div>
+                    <h1><%= user.getNombre()%></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span4">
+                    <h2>Juegos pendientes (<%--= pendientes.size()--%>):</h2>
+                    <ul>
+                        <%--
+                            for (Pendientes p : pendientes) {
+                                out.println("<li>" + p.getJuego().getFecha() + "</li>");
+                            }
+                        --%>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <input type="hidden" ng-model="userID" value="<%= request.getSession().getAttribute("user")%>"/>
-
-        <div class="footer container">
-            <p class="muted credit">
-                &copy; Proyecto de Ingenier&iacute;a de Software 2012-2013 | <a
-                    href="http://stats.pingdom.com/qikt2b86ybuv/868786">Estado del
-                    sistema</a> | Versión <span app-version></span>
-            </p>
-        </div>
-
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-        <script src="app/js/app.js"></script>
-        <script src="app/js/services.js"></script>
-        <script src="app/js/controllers.js"></script>
-        <script src="app/js/filters.js"></script>
-        <script src="app/js/directives.js"></script>
+        <input type="hidden" value="<%= request.getSession().getAttribute("user")%>"/>
+        <%@include file="app/partials/footer.jspf" %>        
     </body>
 </html>
